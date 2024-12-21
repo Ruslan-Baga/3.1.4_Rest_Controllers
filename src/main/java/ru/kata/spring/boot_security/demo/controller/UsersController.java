@@ -35,11 +35,11 @@ public class UsersController {
     }
 
     @PostMapping
-    public String create(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
+    public String create(@Valid @ModelAttribute("user") User user, @RequestParam String role, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return "/views/new";
         }
-        userService.save(user);
+        userService.save(user, role);
         return "redirect:/users";
     }
     @GetMapping("/deleteUser")
