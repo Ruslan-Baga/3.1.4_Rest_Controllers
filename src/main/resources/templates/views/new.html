@@ -6,9 +6,13 @@
 </head>
 <body>
 <form th:method="POST" th:action="@{/users}" th:object="${user}">
-    <label for="name">Enter name: </label>
+    <label for="name">Enter login: </label>
     <input type="text" th:field="*{name}" id="name"/>
     <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    <br/>
+    <label for="password">Enter password: </label>
+    <input type="password" th:field="*{password}" id="password"/>
+    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
     <br/>
     <label for="age">Enter age: </label>
     <input type="text" th:field="*{age}" id="age"/>

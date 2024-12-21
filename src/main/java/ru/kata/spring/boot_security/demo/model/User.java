@@ -32,10 +32,15 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    public User(String name,int age, String email) {
+    @NotBlank
+    @Column
+    private String password;
+
+    public User(String name,int age, String email, String password) {
         this.name = name;
         this.email = email;
         this.age = age;
+        this.password = password;
     }
 
     public User() {
@@ -69,8 +74,12 @@ public class User {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public @NotBlank String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@NotBlank String password) {
+        this.password = password;
     }
 
     @Override
