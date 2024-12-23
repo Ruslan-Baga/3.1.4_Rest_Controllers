@@ -6,6 +6,7 @@ import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.List;
 
+
 public interface UserService extends UserDetailsService {
     List<User> findAll();
 
@@ -16,5 +17,6 @@ public interface UserService extends UserDetailsService {
     User getUser(int id);
 
     void updateUser(User user, int id);
+    User findByEmail(String email);
 
 }

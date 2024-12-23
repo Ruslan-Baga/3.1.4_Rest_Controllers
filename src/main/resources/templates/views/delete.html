@@ -8,7 +8,7 @@
 <div th:if="${error}" th:text="${error}" style="color: red;"></div>
 
 <h1>Delete User</h1>
-    <form th:method="POST" th:action="@{/users/delete}">
+    <form th:method="POST" th:action="@{/admin/delete}">
         <label for="id">Enter User ID:</label>
         <input type="number" name="id" id="id" required/>
         <input type="submit" value="Delete"/>

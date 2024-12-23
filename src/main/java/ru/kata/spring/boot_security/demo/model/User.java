@@ -1,8 +1,5 @@
 package ru.kata.spring.boot_security.demo.model;
 
-
-
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -10,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -124,6 +122,18 @@ public class User {
     public void addRole(Role role){
         this.roleUser.add(role);
     }
+    public String getRolesAsString() {
+        return roleUser.stream()
+                .map(Role::getRole)
+                .collect(Collectors.joining(", "));
+    }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     @Override
     public String toString() {
@@ -136,13 +146,5 @@ public class User {
                 ", password='" + password + '\'' +
                 ", roleUser=" + roleUser +
                 '}';
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }

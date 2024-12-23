@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/admin")
 public class UsersController {
 
     private final UserService userService;
@@ -24,7 +24,7 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping("/users")
     public String allUsers(Model model) {
         model.addAttribute("users", userService.findAll());
         return "/views/list";
@@ -40,7 +40,7 @@ public class UsersController {
             return "/views/new";
         }
         userService.save(user, role);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
     @GetMapping("/deleteUser")
     public String deleteUser(){
@@ -52,10 +52,10 @@ public class UsersController {
             userService.deleteUser(id);
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", "There is no user with this id: " + id);
-            return "redirect:/users/deleteUser";
+            return "redirect:/admin/deleteUser";
         }
 
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
     @GetMapping("/editUser")
     public String editUser(@RequestParam int id, Model model) {
@@ -69,11 +69,10 @@ public class UsersController {
         }
         userService.updateUser(user, user.getId());
 
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
-    @GetMapping("/user/user")
-    public String userPage(@RequestParam int id, Model model){
-        model.addAttribute("user", userService.getUser(id));
-        return "/user";
+    @GetMapping()
+    public String adminPage(){
+        return "/admin";
     }
 }

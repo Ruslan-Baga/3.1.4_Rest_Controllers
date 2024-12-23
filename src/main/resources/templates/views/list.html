@@ -8,16 +8,16 @@
 <div th:each="user : ${users}">
   <p>
     <a th:text="${user.id} + '. ' + ${user.firstName} + ', '+ ${user.lastName} + ', ' + ${user.age} + ', ' + ${user.email} + ', '
-    + ${user.getRoleUser()}">User</a>
+    + ${user.getRolesAsString()}">User</a>
     <br/>
-    <a th:href="@{/users/editUser(id=${user.id})}">Edit</a>
+    <a th:href="@{/admin/editUser(id=${user.id})}">Edit</a>
   </p>
 </div>
 <br/>
 <hr/>
-<a href="/users/new">Create new person</a>
+<a href="/admin/new">Create new person</a>
 <br/>
-<a href="/users/deleteUser">Delete User</a>
+<a href="/admin/deleteUser">Delete User</a>
 <br/>
 <a href="/logout">Logout</a>
 
