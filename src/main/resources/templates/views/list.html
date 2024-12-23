@@ -7,7 +7,8 @@
 <body>
 <div th:each="user : ${users}">
   <p>
-    <a th:text="${user.id} + '. ' + ${user.firstName} + ', '+ ${user.lastName} + ', ' + ${user.age} + ', ' + ${user.email}">User</a>
+    <a th:text="${user.id} + '. ' + ${user.firstName} + ', '+ ${user.lastName} + ', ' + ${user.age} + ', ' + ${user.email} + ', '
+    + ${user.getRoleUser()}">User</a>
     <br/>
     <a th:href="@{/users/editUser(id=${user.id})}">Edit</a>
   </p>

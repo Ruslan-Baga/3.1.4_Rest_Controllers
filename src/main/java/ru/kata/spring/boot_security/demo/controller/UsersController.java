@@ -68,6 +68,12 @@ public class UsersController {
             return "views/edit";
         }
         userService.updateUser(user, user.getId());
+
         return "redirect:/users";
+    }
+    @GetMapping("/user/user")
+    public String userPage(@RequestParam int id, Model model){
+        model.addAttribute("user", userService.getUser(id));
+        return "/user";
     }
 }

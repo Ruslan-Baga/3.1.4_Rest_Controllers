@@ -54,12 +54,13 @@ public class User {
     @Transient
     private String role;
 
-    public User(String firstName, String lastName, int age, String email, String password) {
+    public User(String firstName, String lastName, int age, String email, String password, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.age = age;
         this.password = password;
+        this.role = role;
     }
 
     public User() {

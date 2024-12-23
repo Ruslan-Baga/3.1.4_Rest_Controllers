@@ -1,14 +1,19 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleRepository;
 import ru.kata.spring.boot_security.demo.dao.UserRepository;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.security.CustomUserDetails;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,6 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void save(User user, String role) {
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role roleEntity = roleRepository.findByRole(role);
         if (roleEntity == null) {
             roleEntity = new Role(role);
@@ -64,7 +70,24 @@ public class UserServiceImpl implements UserService {
         updateUser.setEmail(user.getEmail());
         updateUser.setPassword(user.getPassword());
         updateUser.setLastName(user.getLastName());
+        updateUser.setRoleUser(user.getRoleUser());
+
+        Role roleEnt = roleRepository.findByRole(user.getRole());
+        if (roleEnt == null) {
+            roleEnt = new Role(user.getRole());
+            roleRepository.save(roleEnt);
+        }
+        updateUser.getRoleUser().clear();
+        updateUser.addRole(roleEnt);
         userRepository.save(updateUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email).orElseThrow( ()-> new UsernameNotFoundException("User not found"));
+        Hibernate.initialize(user.getRoleUser());
+        return new CustomUserDetails(user);
     }
 }
 
