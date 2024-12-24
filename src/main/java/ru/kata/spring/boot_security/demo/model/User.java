@@ -1,10 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,13 +25,14 @@ public class User {
     @Column(name = "lastName")
     private String lastName;
 
+    @NotNull
     @Min(value = 1, message = "возраст должен положительным")
     @Column(name = "age")
     private int age;
 
     @NotBlank(message = "поле не должно быть пустым")
     @Email
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @NotBlank

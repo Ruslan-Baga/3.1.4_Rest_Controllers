@@ -43,8 +43,10 @@ public class UserServiceImpl implements UserService {
             roleEntity = new Role(role);
             roleRepository.save(roleEntity);
         }
-
         user.addRole(roleEntity);
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("A user with this email already exists");
+        }
         userRepository.save(user);
     }
 
@@ -66,6 +68,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user, int id) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("A user with this email already exists");
+        }
         User updateUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         updateUser.setAge(user.getAge());
         updateUser.setFirstName(user.getFirstName());
@@ -73,7 +78,6 @@ public class UserServiceImpl implements UserService {
         updateUser.setPassword(user.getPassword());
         updateUser.setLastName(user.getLastName());
         updateUser.setRoleUser(user.getRoleUser());
-
         Role roleEnt = roleRepository.findByRole(user.getRole());
         if (roleEnt == null) {
             roleEnt = new Role(user.getRole());
@@ -81,6 +85,7 @@ public class UserServiceImpl implements UserService {
         }
         updateUser.getRoleUser().clear();
         updateUser.addRole(roleEnt);
+
         userRepository.save(updateUser);
     }
     @Override
@@ -88,7 +93,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -96,5 +100,6 @@ public class UserServiceImpl implements UserService {
         Hibernate.initialize(user.getRoleUser());
         return new CustomUserDetails(user);
     }
+
 }
 

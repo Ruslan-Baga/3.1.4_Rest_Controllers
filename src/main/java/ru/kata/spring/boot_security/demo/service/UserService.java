@@ -18,5 +18,5 @@ public interface UserService extends UserDetailsService {
 
     void updateUser(User user, int id);
     User findByEmail(String email);
-
+    //boolean existsByEmail(User user);
 }

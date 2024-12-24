@@ -34,12 +34,18 @@ public class AdminController {
         return "views/new";
     }
 
-    @PostMapping
-    public String create(@Valid @ModelAttribute("user") User user, @RequestParam String role, BindingResult bindingResult) {
+    @PostMapping("/newUser")
+    public String create(@Valid @ModelAttribute("user") User user,BindingResult bindingResult, @RequestParam String role) {
         if (bindingResult.hasErrors()){
             return "/views/new";
         }
-        userService.save(user, role);
+        try {
+            userService.save(user, role);
+        } catch (RuntimeException e) {
+            bindingResult.rejectValue("email", "error.user", e.getMessage());
+            return "/views/new";
+        }
+
         return "redirect:/admin/users";
     }
     @GetMapping("/deleteUser")
@@ -67,7 +73,13 @@ public class AdminController {
         if(bindingResult.hasErrors()){
             return "views/edit";
         }
-        userService.updateUser(user, user.getId());
+        try {
+            userService.updateUser(user, user.getId());
+        } catch (RuntimeException e) {
+            bindingResult.rejectValue("email", "error.user", e.getMessage());
+            return "/views/edit";
+        }
+
 
         return "redirect:/admin/users";
     }
