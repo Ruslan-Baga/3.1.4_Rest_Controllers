@@ -123,6 +123,14 @@ public class User {
     public String getRolesAsString() {
         return roleUser.stream()
                 .map(Role::getRole)
+                .map(role -> {
+                    if (role.contains("ROLE_USER"))
+                        return "USER";
+                    else if (role.contains("ROLE_ADMIN"))
+                        return "ADMIN USER";
+                    else
+                        return "No role";
+                })
                 .collect(Collectors.joining(", "));
     }
     public String getRole() {

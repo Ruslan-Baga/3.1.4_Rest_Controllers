@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Spring Security Example</title>
+</head>
+<body>
+<h1>
+    <span th:text=="${user.firstName}"></span>,welcome to your page!
+</h1>
+
+
+<label for="firstName">First Name: </label>
+<span th:text="${user.firstName}" id="firstName"></span>
+<br/>
+
+<label for="lastName">Last Name: </label>
+<span th:text="${user.lastName}" id="lastName"></span>
+<br/>
+
+<label for="age">Age: </label>
+<span th:text="${user.age}" id="age"></span>
+<br/>
+
+<label for="email">Email: </label>
+<span th:text="${user.email}" id="email"></span>
+<br/>
+<a href="/logout">Logout</a>
+</body>
+</html>

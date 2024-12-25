@@ -2,6 +2,8 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,7 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 
 @Controller
@@ -24,10 +27,14 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
-    public String allUsers(Model model) {
+    @GetMapping()
+    public String allUsers(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         model.addAttribute("users", userService.findAll());
-        return "/views/list";
+        String email = userDetails.getUsername();
+        model.addAttribute("userEmail", email);
+        User user = userService.findByEmail(email);
+        model.addAttribute("role", user.getRolesAsString());
+        return "/admin";
     }
     @GetMapping("/new")
     public String newUser(@ModelAttribute("user") User user) {
@@ -46,22 +53,28 @@ public class AdminController {
             return "/views/new";
         }
 
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
     @GetMapping("/deleteUser")
-    public String deleteUser(){
+    public String deleteUser(@RequestParam int id, Model model) {
+        model.addAttribute("user", userService.getUser(id));
         return "views/delete";
     }
+//    @PostMapping("/delete")
+//    public String delete(@RequestParam Integer id, RedirectAttributes redirectAttributes) {
+//        try {
+//            userService.deleteUser(id);
+//        } catch (RuntimeException e) {
+//            redirectAttributes.addFlashAttribute("error", "There is no user with this id: " + id);
+//            return "redirect:/admin/deleteUser";
+//        }
+//
+//        return "redirect:/admin";
+//    }
     @PostMapping("/delete")
-    public String delete(@RequestParam Integer id, RedirectAttributes redirectAttributes) {
-        try {
-            userService.deleteUser(id);
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("error", "There is no user with this id: " + id);
-            return "redirect:/admin/deleteUser";
-        }
-
-        return "redirect:/admin/users";
+    public String delete(@ModelAttribute("user") User user){
+        userService.deleteUser(user.getId());
+        return "redirect:/admin";
     }
     @GetMapping("/editUser")
     public String editUser(@RequestParam int id, Model model) {
@@ -81,10 +94,10 @@ public class AdminController {
         }
 
 
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
-    @GetMapping()
-    public String adminPage(){
-        return "/admin";
-    }
+//    @GetMapping()
+//    public String adminPage(){
+//        return "/admin";
+//    }
 }
