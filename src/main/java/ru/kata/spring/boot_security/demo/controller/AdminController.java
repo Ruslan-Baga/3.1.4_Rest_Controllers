@@ -8,13 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
-import java.security.Principal;
-
 
 @Controller
 @RequestMapping("/admin")
@@ -60,17 +57,6 @@ public class AdminController {
         model.addAttribute("user", userService.getUser(id));
         return "views/delete";
     }
-//    @PostMapping("/delete")
-//    public String delete(@RequestParam Integer id, RedirectAttributes redirectAttributes) {
-//        try {
-//            userService.deleteUser(id);
-//        } catch (RuntimeException e) {
-//            redirectAttributes.addFlashAttribute("error", "There is no user with this id: " + id);
-//            return "redirect:/admin/deleteUser";
-//        }
-//
-//        return "redirect:/admin";
-//    }
     @PostMapping("/delete")
     public String delete(@ModelAttribute("user") User user){
         userService.deleteUser(user.getId());
@@ -92,12 +78,7 @@ public class AdminController {
             bindingResult.rejectValue("email", "error.user", e.getMessage());
             return "/views/edit";
         }
-
-
+        System.out.println("updateUser method called");
         return "redirect:/admin";
     }
-//    @GetMapping()
-//    public String adminPage(){
-//        return "/admin";
-//    }
 }

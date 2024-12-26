@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
+
 </head>
 <body>
-
 <form th:method="POST" th:action="@{/admin/edit}" th:object="${user}">
     <input type="hidden" th:field="*{id}" />
     <label for="id">ID </label>
@@ -46,5 +46,7 @@
     <br/>
     <input type="submit" value="Update"/>
 </form>
+
+
 </body>
 </html>
