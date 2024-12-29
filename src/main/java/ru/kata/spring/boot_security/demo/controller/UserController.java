@@ -25,6 +25,8 @@ public class UserController {
         String email = authentication.getName();
         User user = userService.findByEmail(email);
         model.addAttribute("user", user);
+        model.addAttribute("userEmail", email);
+        model.addAttribute("role", user.getRolesAsString());
         return "/user";
     }
     @GetMapping("/index")

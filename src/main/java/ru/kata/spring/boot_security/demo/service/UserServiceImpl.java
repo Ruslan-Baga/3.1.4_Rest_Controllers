@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user, int id) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmailAndIdNot(user.getEmail(), id)) {
             throw new RuntimeException("A user with this email already exists");
         }
         User updateUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
