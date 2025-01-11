@@ -1,44 +1,44 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete User</title>
-</head>
-<body>
-<div th:if="${error}" th:text="${error}" style="color: red;"></div>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Delete User</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div th:if="${error}" th:text="${error}" style="color: red;"></div>-->
 
-<h1>Delete User</h1>
-<form th:method="POST" th:action="@{/admin/delete}" th:object="${user}">
-    <input type="hidden" th:field="*{id}" />
-<!--    <form th:method="POST" th:action="@{/admin/delete}">-->
-<!--        <label for="id">Enter User ID:</label>-->
-<!--        <input type="number" name="id" id="id" required/>-->
-    <label for="id">ID </label>
-    <br/>
-    <span th:text="${user.id}" id="id"></span>
-    <br/>
-    <label for="firsName">First Name </label>
-    <br/>
-    <span th:text="${user.firstName}" id="firsName"></span>
-    <br/>
-    <label for="lastName">Last Name </label>
-    <br/>
-    <span th:text="${user.lastName}" id="lastName"></span>
-    <br/>
-    <label for="age">Age</label>
-    <br/>
-    <span th:text="${user.age}" id="age"></span>
-    <br/>
-    <label for="email">Email</label>
-    <br/>
-    <span th:text="${user.email}" id="email"></span>
-    <br/>
-    <label for="role">Role</label>
-    <br/>
-    <span th:text="${user.roleUser}" id="role"></span>
-    <br/>
-        <input type="submit" value="Delete"/>
-        </form>
-    </body>
-</html>
+<!--<h1>Delete User</h1>-->
+<!--<form th:method="POST" th:action="@{/admin/delete}" th:object="${user}">-->
+<!--    <input type="hidden" th:field="*{id}" />-->
+<!--&lt;!&ndash;    <form th:method="POST" th:action="@{/admin/delete}">&ndash;&gt;-->
+<!--&lt;!&ndash;        <label for="id">Enter User ID:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="number" name="id" id="id" required/>&ndash;&gt;-->
+<!--    <label for="id">ID </label>-->
+<!--    <br/>-->
+<!--    <span th:text="${user.id}" id="id"></span>-->
+<!--    <br/>-->
+<!--    <label for="firsName">First Name </label>-->
+<!--    <br/>-->
+<!--    <span th:text="${user.firstName}" id="firsName"></span>-->
+<!--    <br/>-->
+<!--    <label for="lastName">Last Name </label>-->
+<!--    <br/>-->
+<!--    <span th:text="${user.lastName}" id="lastName"></span>-->
+<!--    <br/>-->
+<!--    <label for="age">Age</label>-->
+<!--    <br/>-->
+<!--    <span th:text="${user.age}" id="age"></span>-->
+<!--    <br/>-->
+<!--    <label for="email">Email</label>-->
+<!--    <br/>-->
+<!--    <span th:text="${user.email}" id="email"></span>-->
+<!--    <br/>-->
+<!--    <label for="role">Role</label>-->
+<!--    <br/>-->
+<!--    <span th:text="${user.roleUser}" id="role"></span>-->
+<!--    <br/>-->
+<!--        <input type="submit" value="Delete"/>-->
+<!--        </form>-->
+<!--    </body>-->
+<!--</html>-->
 

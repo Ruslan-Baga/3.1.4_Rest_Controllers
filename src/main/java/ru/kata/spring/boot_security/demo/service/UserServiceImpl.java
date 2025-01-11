@@ -12,7 +12,9 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.security.CustomUserDetails;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -36,14 +38,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void save(User user, String role) {
+    public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role roleEntity = roleRepository.findByRole(role);
-        if (roleEntity == null) {
-            roleEntity = new Role(role);
-            roleRepository.save(roleEntity);
+        Set<Role> set = new HashSet<>();
+        for (Role role : user.getRoleUser()) {
+            Role roleEntity = roleRepository.findByRole(role.getRole());
+            if (roleEntity == null) {
+                roleEntity = new Role(role.getRole());
+                roleRepository.save(roleEntity);
+            }
+            set.add(roleEntity);
         }
-        user.addRole(roleEntity);
+            user.setRoleUser(set);
+
+
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("A user with this email already exists");
         }
@@ -67,24 +75,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(User user, int id) {
-        if (userRepository.existsByEmailAndIdNot(user.getEmail(), id)) {
+    public void updateUser(User user) {
+        if (userRepository.existsByEmailAndIdNot(user.getEmail(), user.getId())) {
             throw new RuntimeException("A user with this email already exists");
         }
-        User updateUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User updateUser = userRepository.findById(user.getId()).orElseThrow(() -> new RuntimeException("User not found"));
         updateUser.setAge(user.getAge());
         updateUser.setFirstName(user.getFirstName());
         updateUser.setEmail(user.getEmail());
         updateUser.setPassword(user.getPassword());
         updateUser.setLastName(user.getLastName());
         updateUser.setRoleUser(user.getRoleUser());
-        Role roleEnt = roleRepository.findByRole(user.getRole());
-        if (roleEnt == null) {
-            roleEnt = new Role(user.getRole());
-            roleRepository.save(roleEnt);
-        }
+//        Role roleEnt = roleRepository.findByRole(user.getRole());
+//        if (roleEnt == null) {
+//            roleEnt = new Role(user.getRole());
+//            roleRepository.save(roleEnt);
+//        }
         updateUser.getRoleUser().clear();
-        updateUser.addRole(roleEnt);
+//        updateUser.addRole(roleEnt);
 
         userRepository.save(updateUser);
     }
@@ -99,6 +107,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Hibernate.initialize(user.getRoleUser());
         return new CustomUserDetails(user);
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Role> allRoles() {
+        return roleRepository.findAll();
     }
 
 }

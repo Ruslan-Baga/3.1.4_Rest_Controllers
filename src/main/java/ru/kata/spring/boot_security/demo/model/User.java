@@ -47,16 +47,14 @@ public class User {
     )
     private Set<Role> roleUser = new HashSet<>();
 
-    @Transient
-    private String role;
 
-    public User(String firstName, String lastName, int age, String email, String password, String role) {
+    public User(String firstName, String lastName, int age, String email, String password, Set<Role> roleUser) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.age = age;
         this.password = password;
-        this.role = role;
+        this.roleUser = roleUser;
     }
 
     public User() {
@@ -133,13 +131,6 @@ public class User {
                 })
                 .collect(Collectors.joining(", "));
     }
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     @Override
     public String toString() {
@@ -150,7 +141,7 @@ public class User {
                 ", age=" + age +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", roleUser=" + roleUser +
+                ", roles=" + roleUser +
                 '}';
     }
 }

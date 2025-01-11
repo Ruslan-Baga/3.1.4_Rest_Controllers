@@ -2,20 +2,18 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-import java.security.Principal;
-
-@Controller
-@RequestMapping("/admin")
+@RestController
+@RequestMapping("/api/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -25,62 +23,51 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public String allUsers(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        model.addAttribute("users", userService.findAll());
-        String email = userDetails.getUsername();
-        model.addAttribute("userEmail", email);
-        User user = userService.findByEmail(email);
-        model.addAttribute("role", user.getRolesAsString());
-        return "/admin";
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> allUsers() {
+        return new ResponseEntity<>(userService.findAll().stream()
+                .map(user -> new UserDTO(user.getId(),
+                user.getEmail(),
+                user.getFirstName(), user.getLastName(), user.getAge(),
+                user.getRolesAsString()))
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
-    @GetMapping("/new")
-    public String newUserPage(Model model, Principal principal) {
-        model.addAttribute("userEmail", principal.getName());
-        User user = userService.findByEmail(principal.getName());
-        model.addAttribute("role", user.getRolesAsString());
-        return "admin";
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
+        return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
-
-    @PostMapping("/newUser")
-    public String create(@Valid @ModelAttribute("user") User user,BindingResult bindingResult, @RequestParam String role) {
-        if (bindingResult.hasErrors()){
-            return "/views/new";
+    @PostMapping
+    public ResponseEntity<User> create(@RequestBody User user) {
+        if (user.getRoleUser() == null || user.getRoleUser().isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
         }
         try {
-            userService.save(user, role);
+            userService.save(user);
+            return ResponseEntity.ok(user);
         } catch (RuntimeException e) {
-            bindingResult.rejectValue("email", "error.user", e.getMessage());
-            return "/views/new";
+            return ResponseEntity.badRequest().body(null);
         }
-
-        return "redirect:/admin";
     }
-    @GetMapping("/deleteUser")
-    public String deleteUser(@RequestParam int id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "views/delete";
-    }
-    @PostMapping("/delete")
-    public String delete(@ModelAttribute("user") User user){
-        userService.deleteUser(user.getId());
-        return "redirect:/admin";
-    }
-    @PostMapping("/edit")
-    public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
-        if(bindingResult.hasErrors()){
-            model.addAttribute("user", user);
-            model.addAttribute("users", userService.findAll());
-            return "/admin";
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         try {
-            userService.updateUser(user, user.getId());
+            userService.deleteUser(id);
+            return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
-            bindingResult.rejectValue("email", "error.user", e.getMessage());
-            model.addAttribute("users", userService.findAll());
-            model.addAttribute("user", user);
-            return "/admin";
+            return ResponseEntity.notFound().build();
         }
-        return "redirect:/admin";
+    }
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        try {
+            userService.updateUser(user);
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    @GetMapping("/roles")
+    public List<Role> allRoles() {
+        return userService.allRoles();
     }
 }
