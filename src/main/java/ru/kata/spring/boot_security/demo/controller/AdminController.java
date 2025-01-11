@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/admin")
@@ -24,13 +23,8 @@ public class AdminController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> allUsers() {
-        return new ResponseEntity<>(userService.findAll().stream()
-                .map(user -> new UserDTO(user.getId(),
-                user.getEmail(),
-                user.getFirstName(), user.getLastName(), user.getAge(),
-                user.getRolesAsString()))
-                .collect(Collectors.toList()), HttpStatus.OK);
+    public ResponseEntity<List<User>> allUsers() {
+        return new ResponseEntity<>(userService.findAll(),HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {

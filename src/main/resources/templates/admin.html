@@ -238,7 +238,7 @@
 
         tbody.empty();
         users.forEach((user) => {
-            const {id, firstName, lastName, age, email, role} = user;
+            const {id, firstName, lastName, age, email, rolesAsString} = user;
 
             tbody.append(`<tr>
         <td>${id}</td>
@@ -246,7 +246,7 @@
         <td>${lastName}</td>
         <td>${age}</td>
         <td>${email}</td>
-        <td>${role}</td>
+        <td>${rolesAsString}</td>
         <td><button type="button" class="btn btn-primary" id="editButton"  onclick="openModalHandler(${action.update}, parseInt(${id}))">Edit</button></td>
         <td><button type="button" class="btn btn-danger" id="deleteButton" onclick="openModalHandler(${action.delete}, ${id})">Delete</button></td>
         </tr>`)
