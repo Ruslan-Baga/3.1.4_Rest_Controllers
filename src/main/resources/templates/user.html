@@ -80,6 +80,7 @@
                         <th>ID</th>
                         <th>Firstname</th>
                         <th>Lastname</th>
+                        <th>Age</th>
                         <th>Email</th>
                         <th>Roles</th>
                     </tr>
@@ -103,7 +104,7 @@
             headers: {'Content-Type': 'application/json'}
         });
 
-        const {id, username, password, firstName, lastName, email, rolesAsString} = await response.json();
+        const {id, username, password, firstName, lastName, age, email, rolesAsString} = await response.json();
 
         $('#currentUser').text(email);
         $('#roles').text(rolesAsString);
@@ -113,6 +114,7 @@
         <td>${id}</td>
         <td>${firstName}</td>
         <td>${lastName}</td>
+        <td>${age}</td>
         <td>${email}</td>
         <td>${rolesAsString}</td>
       </tr>`);

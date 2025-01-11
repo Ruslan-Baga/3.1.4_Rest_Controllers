@@ -4,10 +4,13 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -31,7 +34,10 @@ public class AdminController {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
+    public ResponseEntity<User> create(@RequestBody @Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(null);
+        }
         if (user.getRoleUser() == null || user.getRoleUser().isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -52,7 +58,10 @@ public class AdminController {
         }
     }
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity<User> updateUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(null);
+        }
         try {
             userService.updateUser(user);
             return ResponseEntity.ok(user);

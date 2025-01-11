@@ -117,26 +117,26 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <div class="mb-3">
                             <label for="firstName" class="form-label" style="font-weight: bold;">First name</label>
-                            <input type="text" class="form-control w-25 mx-auto" id="firstName" name="firstName" required>
+                            <input type="text" class="form-control w-25 mx-auto" id="firstName" name="firstName" autocomplete="given-name" required>
                         </div>
                         <div class="mb-3">
                             <label for="lastName" class="form-label" style="font-weight: bold;">Last name</label>
-                            <input type="text" class="form-control w-25 mx-auto" id="lastName" name="lastName" required>
+                            <input type="text" class="form-control w-25 mx-auto" id="lastName" name="lastName" autocomplete="family-name" required>
                         </div>
                         <div class="mb-3">
                             <label for="age" class="form-label" style="font-weight: bold;">Age</label>
-                            <input type="number" class="form-control w-25 mx-auto" id="age" name="age" required>
+                            <input type="number" class="form-control w-25 mx-auto" id="age" name="age" autocomplete="age" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label" style="font-weight: bold;">Email</label>
-                            <input type="text" class="form-control w-25 mx-auto" id="email" name="email" required>
+                            <input type="text" class="form-control w-25 mx-auto" id="email" name="email" autocomplete="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label" style="font-weight: bold;">Password</label>
-                            <input type="password" class="form-control w-25 mx-auto" id="password" name="password" required>
+                            <input type="password" class="form-control w-25 mx-auto" id="password" name="password" autocomplete="new-password" required>
                         </div>
                         <div class="mb-3">
-                            <label for="role" class="form-label" style="font-weight: bold;">Role</label>
+                            <label for="role" class="form-label" style="font-weight: bold; display: block; text-align: center">Role</label>
                             <select class="form-select w-25 mx-auto" id="role" name="role" multiple>
                                 <option value="ROLE_USER" data-id="1">User</option>
                                 <option value="ROLE_ADMIN" data-id="2">Admin</option>
@@ -150,7 +150,7 @@
     </div>
 </div>
 
-<!--Модальное окно-->
+<!--Редактирование-->
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -164,39 +164,42 @@
                 <form id="editUserForm">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="mb-3">
-                        <label for="editUserId" class="form-label fw-bold">ID</label>
+                        <label for="editUserId" class="form-label" style="font-weight: bold; display: block; text-align: center">ID</label>
                         <input type="text" class="form-control bg-light" id="editUserId" name="id" readonly>
                     </div>
 
                     <div class="mb-3">
-                        <label for="editFirstName" class="form-label fw-bold">First Name</label>
-                        <input type="text" class="form-control" id="editFirstName" name="firstName" value="">
+                        <label for="editFirstName" class="form-label" style="font-weight: bold; display: block; text-align: center">First Name</label>
+                        <input type="text" class="form-control" id="editFirstName" name="firstName" value="" autocomplete="given-name">
                     </div>
                     <div class="mb-3">
-                        <label for="editLastName" class="form-label fw-bold">Last Name</label>
-                        <input type="text" class="form-control" id="editLastName" name="lastName" value="">
+                        <label for="editLastName" class="form-label" style="font-weight: bold; display: block; text-align: center">Last Name</label>
+                        <input type="text" class="form-control" id="editLastName" name="lastName" value="" autocomplete="family-name">
                     </div>
                     <div class="mb-3">
-                        <label for="editAge" class="form-label fw-bold">Age</label>
-                        <input type="number" class="form-control" id="editAge" name="age" value="">
+                        <label for="editAge" class="form-label" style="font-weight: bold; display: block; text-align: center">Age</label>
+                        <input type="number" class="form-control" id="editAge" name="age" value="" autocomplete="age">
                     </div>
                     <div class="mb-3">
-                        <label for="editEmail" class="form-label fw-bold">Email</label>
-                        <input type="text" class="form-control" id="editEmail" name="email" value="">
+                        <label for="editEmail" class="form-label" style="font-weight: bold; display: block; text-align: center">Email</label>
+                        <input type="text" class="form-control" id="editEmail" name="email" value="" autocomplete="email">
                     </div>
                     <div class="mb-3">
-                        <label for="editPassword" class="form-label fw-bold">Password</label>
-                        <input type="password" class="form-control" id="editPassword" name="password">
+                        <label for="editPassword" class="form-label" style="font-weight: bold; display: block; text-align: center">Password</label>
+                        <input type="password" class="form-control" id="editPassword" name="password" autocomplete="new-password">
                     </div>
                     <div class="mb-3">
-                        <label for="editRoles" class="form-label fw-bold">Roles</label>
-                        <select class="form-select" id="editRoles" name="roles" multiple></select>
+                        <label for="editRoles" class="form-label" style="font-weight: bold; display: block; text-align: center">Role</label>
+                        <select class="form-select w-100 mx-auto" id="editRoles" name="role" multiple>
+                            <option value="ROLE_USER" data-id="2">User</option>
+                            <option value="ROLE_ADMIN" data-id="1">Admin</option>
+                        </select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" id="submitEdit" form="editUserForm"></button>
+                <button type="submit" id="submitEdit" form="editUserForm" class="btn btn-primary"></button>
             </div>
         </div>
     </div>
@@ -377,13 +380,12 @@
         const ageField = modalFields.children('#editAge').first();
         const emailField = modalFields.children('#editEmail').first();
         const passwordField = modalFields.children('#editPassword').first();
-        const rolesField = modalFields.children('#editRoles').first();
+
 
 
         const user = {
-            roles: []
+            roleUser: []
         };
-
         if (idField.val()) {
             user.id = parseInt(idField.val());
         }
@@ -396,7 +398,7 @@
             user.lastName = lastNameField.val();
         }
         if (ageField.val()) {
-            user.age = ageField.val();
+            user.age = parseInt(ageField.val());
         }
 
         if (emailField.val()) {
@@ -410,18 +412,18 @@
 
         let addRoles = [];
         let options = document.getElementById('editRoles').options;
-
         for (let opt of options) {
             if (opt.selected) {
-                let id = parseInt(opt.getAttribute('data-id'));
-                let name = opt.getAttribute('data-name');
-                let authority = opt.getAttribute('data-authority');
-                addRoles.push({id, name, authority});
+
+                const roleObject = {
+                    id: parseInt(opt.getAttribute('data-id')),
+                    role: opt.value,
+                    authority: opt.value
+                };
+                addRoles.push(roleObject);
             }
         }
-
-        user.roles = addRoles;
-
+        user.roleUser = addRoles;
         console.log("Collect " + user);
         return user;
     }
@@ -438,6 +440,7 @@
         await getAllUsers();
     }
 
+
     const deleteUser = async ({id}) => fetch(`/api/admin/${id}`, {
         method: 'DELETE', headers: {'Content-Type': 'application/json'}
     });
@@ -447,7 +450,6 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(user)
     });
-
 
 </script>
 </body>

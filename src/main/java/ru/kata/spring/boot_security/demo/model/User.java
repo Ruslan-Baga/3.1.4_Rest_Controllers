@@ -15,11 +15,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotBlank
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯёЁ]{2,}$"
             , message = "длина должна быть больше 2 символов, и может содержать только буквы")
     @Column(name = "firstName")
     private String firstName;
 
+    @NotBlank
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯёЁ]{2,}$"
             , message = "длина должна быть больше 2 символов, и может содержать только буквы")
     @Column(name = "lastName")
