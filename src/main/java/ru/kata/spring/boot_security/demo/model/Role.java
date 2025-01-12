@@ -43,7 +43,7 @@ public class Role implements GrantedAuthority {
         if (role.contains("ROLE_USER")){
             return "USER";
         } else if (role.contains("ROLE_ADMIN")){
-            return "ADMIN USER";
+            return "ADMIN";
         } else
             return "No role";
     }

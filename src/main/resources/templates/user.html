@@ -42,7 +42,6 @@
 </head>
 
 <body>
-<!---->
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
         <span class="navbar-text text-light">
@@ -54,7 +53,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- левая панель -->
+        <!-- > Боковая панель -->
         <div class="col-md-2 px-0">
             <div class="d-flex flex-column flex-shrink-0 p-0 text-white">
                 <ul class="nav nav-pills flex-column">
@@ -91,42 +90,6 @@
         </main>
     </div>
 </div>
-
-<script>
-
-    $(document).ready(function () {
-        return userInfo();
-    });
-
-    async function userInfo() {
-        const response = await fetch('/api/user', {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'}
-        });
-
-        const {id, username, password, firstName, lastName, age, email, rolesAsString} = await response.json();
-
-        $('#currentUser').text(email);
-        $('#roles').text(rolesAsString);
-
-
-        $('#userTableBody').append(`<tr>
-        <td>${id}</td>
-        <td>${firstName}</td>
-        <td>${lastName}</td>
-        <td>${age}</td>
-        <td>${email}</td>
-        <td>${rolesAsString}</td>
-      </tr>`);
-
-        let isAdmin = rolesAsString.some(role => role.name === 'ROLE_ADMIN');
-        if (isAdmin) {
-            $('#adminLink').show();
-        }
-
-    }
-
-</script>
-
+<script src="/user.js"></script>
 </body>
 </html>

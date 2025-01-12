@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
+import ru.kata.spring.boot_security.demo.exception.EmailRuntimeException;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -34,43 +34,32 @@ public class AdminController {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody @Valid User user, BindingResult bindingResult) {
+    public ResponseEntity<?> create(@RequestBody @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        if (user.getRoleUser() == null || user.getRoleUser().isEmpty()) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
         try {
             userService.save(user);
             return ResponseEntity.ok(user);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
+        } catch (EmailRuntimeException e) {
+           throw e;
         }
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-        try {
-            userService.deleteUser(id);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
     }
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+    public ResponseEntity<?> updateUser(@RequestBody @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
         try {
             userService.updateUser(user);
             return ResponseEntity.ok(user);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
+        } catch (EmailRuntimeException e) {
+           throw e;
         }
-    }
-    @GetMapping("/roles")
-    public List<Role> allRoles() {
-        return userService.allRoles();
     }
 }

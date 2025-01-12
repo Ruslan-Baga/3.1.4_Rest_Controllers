@@ -21,4 +21,6 @@ public interface UserService extends UserDetailsService {
     void updateUser(User user);
     User findByEmail(String email);
     List<Role> allRoles();
+
+    boolean existsByEmail(String email);
 }

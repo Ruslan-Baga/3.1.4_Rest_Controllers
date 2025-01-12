@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleRepository;
 import ru.kata.spring.boot_security.demo.dao.UserRepository;
+import ru.kata.spring.boot_security.demo.exception.EmailRuntimeException;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.security.CustomUserDetails;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("A user with this email already exists");
+            throw new EmailRuntimeException("A user with this email already exists");
         }
         userRepository.save(user);
     }
@@ -61,9 +62,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(int id) {
-        if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found");
-        }
         userRepository.deleteById(id);
     }
 
@@ -77,9 +75,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateUser(User user) {
         if (userRepository.existsByEmailAndIdNot(user.getEmail(), user.getId())) {
-            throw new RuntimeException("A user with this email already exists");
+            throw new EmailRuntimeException("Пользователь с таким email существует");
         }
-        User updateUser = userRepository.findById(user.getId()).orElseThrow(() -> new RuntimeException("User not found"));
+        User updateUser = userRepository.findById(user.getId()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         updateUser.setAge(user.getAge());
         updateUser.setFirstName(user.getFirstName());
         updateUser.setEmail(user.getEmail());
@@ -107,6 +105,11 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<Role> allRoles() {
         return roleRepository.findAll();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
 }
