@@ -18,13 +18,13 @@ public class User {
     @NotBlank
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯёЁ]{2,}$"
             , message = "длина должна быть больше 2 символов, и может содержать только буквы")
-    @Column(name = "firstName")
+    @Column(name = "first_name")
     private String firstName;
 
     @NotBlank
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯёЁ]{2,}$"
             , message = "длина должна быть больше 2 символов, и может содержать только буквы")
-    @Column(name = "lastName")
+    @Column(name = "last_name")
     private String lastName;
 
     @NotNull
